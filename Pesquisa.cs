@@ -80,7 +80,7 @@ namespace Manual_Padronizacao
             }
             if (File.Exists(Arq))
             {
-                string Nome = Linha.GetValor("NOME");
+                string Nome = Linha.Get("NOME").Valor;
                 Icon icone = SystemIcons.WinLogo;
                 DirectoryInfo info = Arquivo_Pasta.info(Arq);
                 if (Imagens.Images.ContainsKey(info.Extension.Replace(".","")) == false)
