@@ -52,11 +52,11 @@
             this.ShowTelaNews.AutoSize = true;
             this.ShowTelaNews.Checked = true;
             this.ShowTelaNews.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ShowTelaNews.Location = new System.Drawing.Point(522, 433);
+            this.ShowTelaNews.Location = new System.Drawing.Point(545, 433);
             this.ShowTelaNews.Name = "ShowTelaNews";
-            this.ShowTelaNews.Size = new System.Drawing.Size(150, 17);
+            this.ShowTelaNews.Size = new System.Drawing.Size(127, 17);
             this.ShowTelaNews.TabIndex = 0;
-            this.ShowTelaNews.Text = "Não Exibir na Inicialização";
+            this.ShowTelaNews.Text = "Exibir na Inicialização";
             this.ShowTelaNews.UseVisualStyleBackColor = true;
             this.ShowTelaNews.CheckedChanged += new System.EventHandler(this.ShowTelaNews_CheckedChanged);
             // 

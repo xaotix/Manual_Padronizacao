@@ -19,7 +19,7 @@ namespace Manual_Padronizacao
 
         private void ShowTelaNews_CheckedChanged(object sender, EventArgs e)
         {
-            Biblioteca_Daniel.Funcoes_ini.gravar_ini(Vars.CfgUser, "Geral", ShowTelaNews.Name, ShowTelaNews.Checked.ToString());
+            DLM.ini.INI.Set(Vars.CfgUser, "Geral", ShowTelaNews.Name, ShowTelaNews.Checked.ToString());
         }
 
         private void Novidades_Load(object sender, EventArgs e)
@@ -28,10 +28,10 @@ namespace Manual_Padronizacao
             ShowTelaNews.Checked = Convert.ToBoolean(Biblioteca_Daniel.Funcoes_ini.ler_ini(Vars.CfgUser, "Geral", ShowTelaNews.Name, true.ToString()));
 
 
-            DB.Celula XP = new DB.Celula("MOSTRAR_NEWS","SIM");
-            List<DB.Linha> Linhas = Pesquisa.Filtrar(Vars.Buffer.Banco.Linhas,new List<DB.Celula> { XP }, true);
+            DLM.db.Celula XP = new DLM.db.Celula("MOSTRAR_NEWS","SIM");
+            List<DLM.db.Linha> Linhas = Pesquisa.Filtrar(Vars.Buffer.GetTabela().Linhas,new List<DLM.db.Celula> { XP }, true);
 
-            foreach(DB.Linha L in Linhas)
+            foreach(DLM.db.Linha L in Linhas)
             {
                 dataGridView1.Rows.Add(L.Celulas.Find(x => x.Coluna == "NOME").Valor, L.Celulas.Find(x => x.Coluna == "DESCRICAO_REVISAO").Valor);
             }

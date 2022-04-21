@@ -1,4 +1,6 @@
 ﻿using Biblioteca_Daniel;
+using Conexoes;
+using DLM.db;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -47,7 +49,7 @@ namespace Manual_Padronizacao
             }
         }
         
-        public static void GetComboxAtivos(List<DB.Celula> Celulas,Control Controle)
+        public static void GetComboxAtivos(List<Celula> Celulas,Control Controle)
         {
             foreach(Control tc in Controle.Controls)
             {
@@ -55,7 +57,7 @@ namespace Manual_Padronizacao
                 {
                     if(tc.Enabled)
                     {
-                        Celulas.Add(new DB.Celula(tc.Name, tc.Text));
+                        Celulas.Add(new Celula(tc.Name, tc.Text));
                     }                 
                 }
                 else
@@ -128,103 +130,24 @@ namespace Manual_Padronizacao
         }
         public static void Abrir(string Arquivo)
         {
-        
-
-            try
-            {
-                System.Diagnostics.Process.Start(DuplicanoTemp(Arquivo));
-            }
-            catch (Exception ex)
-            {
-
-                System.Windows.Forms.MessageBox.Show(ex.Message);
-            }
+            DuplicanoTemp(Arquivo).Abrir();
         }
 
         public static string DuplicanoTemp(string Arquivo)
         {
-            string ArqTemp = Vars.PastaTmp + "dlm" + RandomString(5)  + Arquivo_Pasta.info(Arquivo).Extension;
+            var arquivo = new Conexoes.Arquivo(Arquivo);
+            var prefix = DLM.vars.Cfg.Init.TMP_Manual() + arquivo.Nome;
+            string ArqTemp = prefix + "." + arquivo.Extensao;
             int c = 0;
-            while (File.Exists(ArqTemp))
+            while (!Conexoes.Utilz.Copiar(Arquivo, ArqTemp, false))
             {
-                try
-                {
-                    File.Delete(ArqTemp);
-                }
-                catch (Exception)
-                {
-                    ArqTemp = Vars.PastaTmp + "dlm" + RandomString(5)  + Arquivo_Pasta.info(Arquivo).Extension;
-                    c++;
-                    //throw;
-                }
+                ArqTemp = prefix + "_" + c + "." + arquivo.Extensao;
+                c++;
             }
-            File.Copy(Arquivo, ArqTemp);
             return ArqTemp;
         }
 
-        public static void Preview(string Arquivo)
-        {
-            string ArquivoFim = Arquivo.Replace("|", @"\");
-            if(File.Exists(ArquivoFim))
-            {
-                string Ext = Arquivo_Pasta.info(ArquivoFim).Extension.Replace(".", "").ToLower();
-                 if (Vars.ExtensoesAbrir().Find(x => x == Ext) != null)
-                {
-                    Abrir(Arquivo);
-                }
-                else if (Vars.ExtensoesOffice().Find(x => x == Ext) != null)
-                {
-                    //Visualizador.MainWindow.Abrir(ArquivoFim);
-                }
-                else if (Vars.ExtensoesDXF().Find(x => x == Ext) != null)
-                {
-                    if(Convert.ToBoolean(Funcoes_ini.ler_ini(Vars.cfguser,"Geral","CAD","False")))
-                    {
-                        Abrir(Arquivo);
 
-                    }
-                    else
-                    {
-                    AbrirDXF(Arquivo);
-
-                    }
-                }
-            
-                else
-                {
-                    System.Windows.Forms.MessageBox.Show("Não é possível pré-visualizar o arquivo " + Arquivo + " formato não suportado.");
-                }
-            }
-            else
-            {
-                System.Windows.Forms.MessageBox.Show("O arquivo " + Arquivo + " não existe.");
-            }
-        }
-        public static void AbrirDXF(string Arquivo)
-        {
-            if(File.Exists(Arquivo))
-            {
-                try
-                {
-                    //Matar(Vars.ExecDXF);
-                    Process nDxf = new Process();
-                    nDxf.StartInfo.WorkingDirectory = System.Windows.Forms.Application.StartupPath;
-                    nDxf.StartInfo.FileName = Vars.ExecDXF + ".exe";
-                    nDxf.StartInfo.Arguments = "\"" + DuplicanoTemp(Arquivo) + "\"";
-                    nDxf.Start();
-                }
-                catch (Exception)
-                {
-
-                    throw;
-                }
-              
-            }
-            else
-            {
-                System.Windows.Forms.MessageBox.Show("O arquivo " + Arquivo + " não existe.");
-            }
-        }
         public static void Matar(string Executavel)
         {
             foreach(Process P in Process.GetProcesses())
@@ -244,14 +167,38 @@ namespace Manual_Padronizacao
                 }
             }
         }
-        private static Random random = new Random();
-        public static string RandomString(int length)
-        {
-            const string chars = "abcdefgijklmnopqrstuvxyz0123456789";
-            return new string(Enumerable.Repeat(chars, length)
-              .Select(s => s[random.Next(s.Length)]).ToArray());
-        }
 
+        public static void SetPNG(Arquivo Arq, PictureBox Preview)
+        {
+            var arqpng = Arq.Nome + ".png";
+            var png = Arq.Pasta + arqpng;
+            var png2 = DLM.vars.Cfg.Init.png_dir + arqpng;
+            var png_tmp = DLM.vars.Cfg.Init.PNG_Manual() + Arq.Nome + ".png";
+
+
+
+            if (png2.Existe())
+            {
+                int c = 1;
+                while (!Conexoes.Utilz.Copiar(png2, png_tmp, false))
+                {
+                    png_tmp = DLM.vars.Cfg.Init.PNG_Manual() + Arq.Nome + "_" + c + ".png";
+                    c++;
+                }
+            }
+
+
+            if (png_tmp.Existe())
+            {
+
+                Preview.Image = System.Drawing.Image.FromFile(png_tmp);
+                Preview.Image.Tag = Arq.Nome;
+            }
+            else
+            {
+                Preview.Image = Properties.Resources.semimagem;
+            }
+        }
 
         public static double Porcentagem(double Valor, double Total, int Decimais = 2)
         {

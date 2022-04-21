@@ -26,7 +26,7 @@ namespace Manual_Padronizacao
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Funcoes_ini.gravarcfg(this, Vars.CfgUser);
+            Biblioteca_Daniel.Funcoes_ini.gravarcfg(this, Vars.CfgUser);
             if (Senha.Text=="@medainoC")
             {
                 if(Program.Cadastro.IsDisposed)

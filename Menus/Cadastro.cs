@@ -1,5 +1,5 @@
 ﻿using Biblioteca_Daniel;
-using DB;
+using DLM.db;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -43,7 +43,7 @@ namespace Manual_Padronizacao
 
             PesquisaLocal.SelectedIndex = 0;
             Nome.Items.Clear();
-            List<string> Headers = Vars.Conexao.GetColunas("plm", "padronizacao");
+            List<string> Headers = Vars.Dbase.GetColunas(DLM.vars.Cfg.Init.db_plm, DLM.vars.Cfg.Init.tb_padronizacao).Valores.Select(x => x.Nome).ToList(); 
 
 
             Forms.AlimentaCombo(this, true);
@@ -79,17 +79,17 @@ namespace Manual_Padronizacao
             if (Chaves.Count==1)
             {
 
-               Vars.Conexao.Consulta(new Celula(Nome.Text, Combo2.Text), exato, "plm", "padronizacao").AlimentaDataGrid(CadastroGrid);
+               Vars.Dbase.Consulta(Nome.Text, Combo2.Text,DLM.vars.Cfg.Init.db_plm, DLM.vars.Cfg.Init.tb_padronizacao).AlimentaDataGrid(CadastroGrid);
          
             }
             else
             {
-                DB.Tabela Resultado = Vars.Conexao.Consulta(new Celula("Ativo", ""),false, "plm", "padronizacao");
-                List<DB.Linha> Filtro = new List<Linha>();
+                DLM.db.Tabela Resultado = Vars.Dbase.Consulta(DLM.vars.Cfg.Init.db_plm, DLM.vars.Cfg.Init.tb_padronizacao);
+                List<DLM.db.Linha> Filtro = new List<Linha>();
                 foreach(string Chave in Chaves)
                 {
-                    List<DB.Linha> nLinhas = Resultado.Filtrar(Nome.Text, Chave,true);
-                    foreach(DB.Linha l in nLinhas)
+                    List<DLM.db.Linha> nLinhas = Resultado.Filtrar(Nome.Text, Chave,true).Linhas;
+                    foreach(DLM.db.Linha l in nLinhas)
                     {
                         if (Filtro.Find(x => x.Valores().SequenceEqual(l.Valores()))==null)
                         {
@@ -114,7 +114,7 @@ namespace Manual_Padronizacao
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Arquivo_Pasta.pasta("Selecione a pasta", Diretorio);
+            Arquivo_Pasta.pasta("Selecione a pasta", Diretorio,DLM.vars.Cfg.Init.pasta_padronizados);
 
             AdicionarPastas();
 
@@ -122,6 +122,12 @@ namespace Manual_Padronizacao
 
         private void AdicionarPastas()
         {
+            if(!Diretorio.Text.ToUpper().Contains(DLM.vars.Cfg.Init.pasta_padronizados))
+            {
+                Conexoes.Utilz.Alerta($"Pasta inválida! deve ser dentro da pasta raiz de padronizados." +
+                    $"\n{DLM.vars.Cfg.Init.pasta_padronizados}");
+                return;
+            }
             if (Importar.Rows.Count > 0)
             {
                 if (Funcoes_Form.mensagem("Ao continuar em sim, a lista atual será limpa. Deseja continuar?"))
@@ -181,7 +187,6 @@ namespace Manual_Padronizacao
         private void atualizarDiretóriosToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
-            
             List<List<string>> Lista = Funcoes_Form.datagrid_para_lista(Importar);
             
             if(Funcoes_Form.mensagem("Você tem certeza que deseja atualizar os diretórios dos " + Lista.Count()  + " itens?"))
@@ -193,9 +198,9 @@ namespace Manual_Padronizacao
                 {
                     w.Progresso.Value = w.Progresso.Value + 1;
 
-                    List<DB.Celula> Edicoes = new List<DB.Celula>();
+                    List<DLM.db.Celula> Edicoes = new List<DLM.db.Celula>();
                     Celula x = new Celula("DIR", L[1]);
-                    Vars.Conexao.Update("NOME", L[0], Edicoes,Vars.nome_db, Vars.nome_tb);
+                    Vars.Dbase.Update("NOME", L[0], Edicoes,Vars.nome_db, Vars.nome_tb);
                 }
                 w.Close();
                 MessageBox.Show("Finalizado!");
@@ -409,38 +414,16 @@ namespace Manual_Padronizacao
             }
         }
 
-        private void button2_Click_2(object sender, EventArgs e)
-        {
-            //if (Imagem < IconesTree.Images.Count-1)
-            //{
-            //    Imagem = Imagem + 1;
-            //}
-            //else
-            //{
-            //    Imagem = 0;
-            //}
-            //pictureBox1.Image = IconesTree.Images[Imagem];
-        }
 
-        private void button3_Click(object sender, EventArgs e)
-        {
-            //if (Imagem >0)
-            //{
-            //    Imagem = Imagem - 1;
-            //}
-            //else
-            //{
-            //    Imagem = 0;
-            //}
-            //pictureBox1.Image = IconesTree.Images[Imagem];
-        }
+
+
 
         private void listView1_Click(object sender, EventArgs e)
         {
             if(listView1.SelectedItems.Count>0)
             {
                 Imagem = listView1.SelectedItems[0].Index;
-                pictureBox1.Image = Program.Menu.IconesTree.Images[listView1.SelectedItems[0].Index];
+                icone_png.Image = Program.Menu.IconesTree.Images[listView1.SelectedItems[0].Index];
             }
         }
 
@@ -480,7 +463,7 @@ namespace Manual_Padronizacao
 
         private void Cadastro_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Vars.Buffer.Banco = Vars.Conexao.Consulta(new Celula("Ativo", "Sim"), false, "plm", "padronizacao");
+            Vars.Buffer.GetTabela(true);
             Program.Menu.Resultado.Items.Clear();
         }
 
@@ -507,7 +490,7 @@ namespace Manual_Padronizacao
             List<string> arquivo = Arquivo_Pasta.abrir("csv", "Defina o arquivo");
             if (arquivo.Count > 0)
             {
-                List<string> Cabs = Vars.Conexao.GetColunas("plm", "padronizacao");
+                List<string> Cabs = Vars.Dbase.GetColunas(DLM.vars.Cfg.Init.db_plm, DLM.vars.Cfg.Init.tb_padronizacao).Valores.Select(x=>x.Nome).ToList();
                 Importar.Rows.Clear();
                 Importar.Columns.Clear();
                 List<string> Cab = arquivo[0].Split(';').ToList();
@@ -588,12 +571,12 @@ namespace Manual_Padronizacao
                 {
                     w.Progresso.Value = w.Progresso.Value + 1;
                     w.Mensagem.Text = Funcoes.Porcentagem(w.Progresso.Value,w.Progresso.Maximum,2) + "%";
-                    List<DB.Celula> Edicoes = new List<DB.Celula>();
+                    List<DLM.db.Celula> Edicoes = new List<DLM.db.Celula>();
                     for (int i = 1; i < L.Cells.Count; i++)
                     {
-                        Edicoes.Add(new DB.Celula(L.Cells[i].OwningColumn.HeaderText, L.Cells[i].Value.ToString()));
+                        Edicoes.Add(new DLM.db.Celula(L.Cells[i].OwningColumn.HeaderText, L.Cells[i].Value.ToString()));
                     }
-                    Vars.Conexao.Update(new List<Celula> { new Celula("NOME", L.Cells[chave_nome].Value.ToString()) }, Edicoes,Vars.nome_db,Vars.nome_tb);
+                    Vars.Dbase.Update("NOME", L.Cells[chave_nome].Value.ToString(), Edicoes,Vars.nome_db,Vars.nome_tb);
                   
 
                 }
@@ -646,9 +629,9 @@ namespace Manual_Padronizacao
                
 
                 List<List<string>> Lista = Funcoes_Form.datagrid_para_lista(Importar);
-                DB.Tabela tb = new DB.Tabela();
+                DLM.db.Tabela tb = new DLM.db.Tabela();
 
-                DB.Tabela Resultado = Vars.Conexao.Consulta(new Celula("NOME", ""), false, "plm", "padronizacao");
+                DLM.db.Tabela Resultado = Vars.Dbase.Consulta(DLM.vars.Cfg.Init.db_plm, DLM.vars.Cfg.Init.tb_padronizacao);
                 List<string> Atuais = Resultado.Linhas.SelectMany(x => x.Celulas.FindAll(z => z.Coluna == "NOME").Select(y => y.Valor)).Distinct().ToList();
 
 
@@ -662,7 +645,7 @@ namespace Manual_Padronizacao
                     }
                     foreach (List<string> L in Lista)
                     {
-                        DB.Linha N = new DB.Linha("padronizacao");
+                        DLM.db.Linha N = new DLM.db.Linha(DLM.vars.Cfg.Init.tb_padronizacao);
                         N.Celulas.Add(new Celula("NOME", L[0]));
                         N.Celulas.Add(new Celula("DIR", L[1].Replace(@"\", "|")));
                         N.Celulas.Add(new Celula("EXTENSAO", L[2]));
@@ -672,7 +655,7 @@ namespace Manual_Padronizacao
                     Tela_Load w = new Tela_Load();
                     w.Show();
                     w.Update();
-                    Vars.Conexao.Cadastro(tb.Linhas, Vars.nome_db, Vars.nome_tb);
+                    Vars.Dbase.Cadastro(tb.Linhas, Vars.nome_db, Vars.nome_tb);
                     w.Close();
                     Importar.Rows.Clear();
                     MessageBox.Show("Importação finalizada.");
@@ -712,8 +695,8 @@ namespace Manual_Padronizacao
             w.Show();
             w.Update();
 
-            DB.Tabela Resultado = Vars.Conexao.Consulta(new Celula("Ativo", ""), false, "plm", "padronizacao");
-            List<DB.Linha> Filtro = new List<Linha>();
+            DLM.db.Tabela Resultado = Vars.Dbase.Consulta(DLM.vars.Cfg.Init.db_plm, DLM.vars.Cfg.Init.tb_padronizacao);
+            List<DLM.db.Linha> Filtro = new List<Linha>();
 
             Resultado.Linhas = Resultado.Linhas.FindAll(x => File.Exists(x.Celulas.Find(Y => Y.Coluna == "DIR").Valor.Replace("|", @"\"))==false);
             Resultado.AlimentaDataGrid(CadastroGrid);
@@ -724,7 +707,7 @@ namespace Manual_Padronizacao
         {
             if(e.KeyCode==Keys.Enter)
             {
-               Vars.Conexao.Consulta(new Celula(Consulta_Log_Combo.Text, Consulta_Log_Texto.Text), false, "plm", "padronizacao_log").AlimentaDataGrid(Log_Acesso);
+               Vars.Dbase.Consulta(new Celula(Consulta_Log_Combo.Text, Consulta_Log_Texto.Text), false,DLM.vars.Cfg.Init.db_plm, "padronizacao_log").AlimentaDataGrid(Log_Acesso);
                
             }
         }

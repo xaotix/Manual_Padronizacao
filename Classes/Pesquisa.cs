@@ -5,9 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
-using Biblioteca_Daniel;
 using System.IO;
 using System.Threading;
+using DLM.db;
+using Biblioteca_Daniel;
 
 namespace Manual_Padronizacao
 {
@@ -16,8 +17,8 @@ namespace Manual_Padronizacao
         private static ToolStripStatusLabel status;
         private static ProgressBar Progresso;
         private static SplitContainer SplitPesquisa;
-        private static List<DB.Linha> Linhas = new List<DB.Linha>();
-        public static void Add(List<DB.Linha> Linhas, System.Windows.Forms.ListView Lista, System.Windows.Forms.ImageList Imagens, ToolStripStatusLabel status,ProgressBar Progresso, SplitContainer SplitPesquisa, bool Limpar=true)
+        private static List<Linha> Linhas = new List<Linha>();
+        public static void Add(List<Linha> Linhas, System.Windows.Forms.ListView Lista, System.Windows.Forms.ImageList Imagens, ToolStripStatusLabel status,ProgressBar Progresso, SplitContainer SplitPesquisa, bool Limpar=true)
         {
             Pesquisa.Progresso = Progresso;
             Pesquisa.status = status;
@@ -56,7 +57,7 @@ namespace Manual_Padronizacao
             List<Task> Tarefas = new List<Task>();
 
             Pesquisa.Linhas = Linhas;
-            foreach (DB.Linha L in Linhas)
+            foreach (DLM.db.Linha L in Linhas)
             {
                 status.Text = "Adicionando " + Linhas.Count + " itens, aguarde... " + Funcoes.Porcentagem(Progresso.Value, Linhas.Count(), 0) + "%";
                 status.GetCurrentParent().Update();
@@ -71,7 +72,7 @@ namespace Manual_Padronizacao
             SplitPesquisa.Visible = true;
 
         }
-        public static void AddNaLista(DB.Linha Linha, System.Windows.Forms.ListView Lista, System.Windows.Forms.ImageList Imagens)
+        public static void AddNaLista(DLM.db.Linha Linha, System.Windows.Forms.ListView Lista, System.Windows.Forms.ImageList Imagens)
         {
             string Arq = Linha.Celulas.Find(x => x.Coluna == "DIR").Valor.Replace("|",@"\");
             if (Vars.SubstituirRepositorio)
@@ -106,7 +107,7 @@ namespace Manual_Padronizacao
                 foreach (ColumnHeader Col in Lista.Columns)
                 {
                     //nItem.SubItems.Add(Linha.Celulas.Find(x => x.Coluna == Col.Text.ToUpper()).Valor);
-                    Valores.Add(Linha.Celulas.Find(x => x.Coluna == Col.Text.ToUpper()).Valor);
+                    Valores.Add(Linha[Col.Text].Valor);
                 }
                 ListViewItem nItem = new ListViewItem(Valores.ToArray());
 
@@ -126,11 +127,11 @@ namespace Manual_Padronizacao
             }
 
         }
-        public static List<DB.Linha> Filtrar(List<DB.Linha> Total, List<DB.Celula> Filtro, bool Exato)
+        public static List<DLM.db.Linha> Filtrar(List<DLM.db.Linha> Total, List<DLM.db.Celula> Filtro, bool Exato)
         {
-            List<DB.Linha> Retorno = new List<DB.Linha>();
+            List<DLM.db.Linha> Retorno = new List<DLM.db.Linha>();
             Retorno.AddRange(Total);
-            foreach (DB.Celula Cl in Filtro)
+            foreach (DLM.db.Celula Cl in Filtro)
             {
                 List<string> Valores = Cl.Valor.Split(Vars.SeparadorPesquisa.ToCharArray()).ToList();
                 if (Exato)
@@ -143,10 +144,10 @@ namespace Manual_Padronizacao
                     else
                     {
                         Retorno = Retorno.FindAll(x => x.Celulas.FindAll(y => y.Coluna.ToLower() == Cl.Coluna.ToLower()).Count > 0);
-                        List<DB.Linha> FiltroSP = new List<DB.Linha>();
+                        List<DLM.db.Linha> FiltroSP = new List<DLM.db.Linha>();
                         FiltroSP.AddRange(Retorno);
                         Retorno.Clear();
-                        foreach (DB.Linha L in FiltroSP)
+                        foreach (DLM.db.Linha L in FiltroSP)
                         {
                             foreach (string Valor in Valores)
                             {
@@ -173,10 +174,10 @@ namespace Manual_Padronizacao
                     else
                     {
                         Retorno = Retorno.FindAll(x => x.Celulas.FindAll(y => y.Coluna.ToLower() == Cl.Coluna.ToLower()).Count > 0);
-                        List<DB.Linha> FiltroSP = new List<DB.Linha>();
+                        List<DLM.db.Linha> FiltroSP = new List<DLM.db.Linha>();
                         FiltroSP.AddRange(Retorno);
                         Retorno.Clear();
-                        foreach (DB.Linha L in FiltroSP)
+                        foreach (DLM.db.Linha L in FiltroSP)
                         {
                             foreach (string Valor in Valores)
                             {
@@ -200,7 +201,7 @@ namespace Manual_Padronizacao
 
 
 
-        public static List<DB.Linha> Filtrar(List<DB.Linha> Total, string Chave, bool Exato)
+        public static List<DLM.db.Linha> Filtrar(List<DLM.db.Linha> Total, string Chave, bool Exato)
         {
    
 

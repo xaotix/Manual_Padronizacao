@@ -76,7 +76,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.listView1 = new System.Windows.Forms.ListView();
             this.NIVEL3 = new System.Windows.Forms.ComboBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.icone_png = new System.Windows.Forms.PictureBox();
             this.NIVEL4 = new System.Windows.Forms.ComboBox();
             this.NIVEL5 = new System.Windows.Forms.ComboBox();
             this.AddNode = new System.Windows.Forms.Button();
@@ -100,7 +100,7 @@
             this.splitContainer1.SuspendLayout();
             this.AddEmNivel.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.icone_png)).BeginInit();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Log_Acesso)).BeginInit();
             this.SuspendLayout();
@@ -406,7 +406,7 @@
             // exportarEmCSVToolStripMenuItem
             // 
             this.exportarEmCSVToolStripMenuItem.Name = "exportarEmCSVToolStripMenuItem";
-            this.exportarEmCSVToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.exportarEmCSVToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.exportarEmCSVToolStripMenuItem.Text = "&Exportar em CSV";
             this.exportarEmCSVToolStripMenuItem.Click += new System.EventHandler(this.exportarEmCSVToolStripMenuItem_Click);
             // 
@@ -505,7 +505,7 @@
             this.AddEmNivel.Controls.Add(this.NIVEL2);
             this.AddEmNivel.Controls.Add(this.groupBox1);
             this.AddEmNivel.Controls.Add(this.NIVEL3);
-            this.AddEmNivel.Controls.Add(this.pictureBox1);
+            this.AddEmNivel.Controls.Add(this.icone_png);
             this.AddEmNivel.Controls.Add(this.NIVEL4);
             this.AddEmNivel.Controls.Add(this.NIVEL5);
             this.AddEmNivel.Controls.Add(this.AddNode);
@@ -571,6 +571,7 @@
             this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.listView1.HideSelection = false;
             this.listView1.Location = new System.Drawing.Point(6, 19);
             this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
@@ -596,14 +597,14 @@
             this.NIVEL3.EnabledChanged += new System.EventHandler(this.NIVEL5_TextChanged);
             this.NIVEL3.TextChanged += new System.EventHandler(this.NIVEL5_TextChanged);
             // 
-            // pictureBox1
+            // icone_png
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(112, 154);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(32, 32);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 7;
-            this.pictureBox1.TabStop = false;
+            this.icone_png.Location = new System.Drawing.Point(112, 154);
+            this.icone_png.Name = "icone_png";
+            this.icone_png.Size = new System.Drawing.Size(32, 32);
+            this.icone_png.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.icone_png.TabIndex = 7;
+            this.icone_png.TabStop = false;
             // 
             // NIVEL4
             // 
@@ -760,7 +761,7 @@
             this.AddEmNivel.ResumeLayout(false);
             this.AddEmNivel.PerformLayout();
             this.groupBox1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.icone_png)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Log_Acesso)).EndInit();
@@ -797,7 +798,7 @@
         private System.Windows.Forms.Button RemoveNode;
         public System.Windows.Forms.ImageList IconesTree;
         private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox icone_png;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.GroupBox AddEmNivel;

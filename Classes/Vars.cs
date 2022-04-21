@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DB;
-using Biblioteca_Daniel;
+using DLM.db;
 using System.Windows.Forms;
+using Biblioteca_Daniel;
 
 namespace Manual_Padronizacao
 {
@@ -19,13 +19,22 @@ namespace Manual_Padronizacao
         }
         public class Buffer
         {
-            public static ArvoreXML tree = new ArvoreXML();
-            public static DB.Tabela Banco;
-            public static List<DB.Linha> FiltroTree = new List<Linha>();
-            public static List<DB.Linha> PesquisaUser = new List<Linha>();
+            public static ArvoreXML tree { get; set; } = new ArvoreXML();
+            private static DLM.db.Tabela _Tabela { get; set; }
+
+            public static DLM.db.Tabela GetTabela(bool update = false)
+            {
+                if (_Tabela == null | update)
+                {
+                    _Tabela = Vars.Dbase.Consulta(new Celula("Ativo", "Sim"), false, DLM.vars.Cfg.Init.db_plm, DLM.vars.Cfg.Init.tb_padronizacao_codigos);
+                }
+                return _Tabela;
+            }
+            public static List<Linha> FiltroTree { get; set; } = new List<Linha>();
+            public static List<Linha> PesquisaUser { get; set; } = new List<Linha>();
         }
-        public static string SeparadorPesquisa = "|";
-        public static string SeparadorChaves = "*";
+        public static string SeparadorPesquisa { get; set; } = "|";
+        public static string SeparadorChaves { get; set; } = "*";
 
 
         public class Niveis
@@ -80,12 +89,11 @@ namespace Manual_Padronizacao
         {
             return Arquivo_Pasta.ler(DirCfgs + "numericos.db");
         }
-        public static DB.Banco Conexao { get; set; }
+        public static DLM.db.Banco Dbase { get; set; }
         public static string PaginaNews { get; set; } = Vars.DirCfgs + "news.mht";
-        public static string PastaTmp { get; set; } = Dir + @"\Temp\";
-        public static string PNGDir { get; set; } = @"\\nbvmsfs04\08b2606cbd462954a1ded3d55c3e4023$\PNG\";
 
-        public static string nome_db { get; set; } = "plm";
-        public static string nome_tb { get; set; } = "padronizacao";
+
+        public static string nome_db { get; set; } =DLM.vars.Cfg.Init.db_plm;
+        public static string nome_tb { get; set; } = DLM.vars.Cfg.Init.tb_padronizacao;
     }
 }

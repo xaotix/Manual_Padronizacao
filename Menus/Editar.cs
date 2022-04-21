@@ -112,7 +112,7 @@ namespace Manual_Padronizacao
                 }
                 foreach(DataGridViewRow L in Dados.Rows)
                 {
-                    List<DB.Celula> Edicoes = new List<DB.Celula>();
+                    List<DLM.db.Celula> Edicoes = new List<DLM.db.Celula>();
                     for (int i = 1; i < L.Cells.Count; i++)
                     {
                         string Nome = L.Cells[i].OwningColumn.HeaderText;
@@ -136,13 +136,13 @@ namespace Manual_Padronizacao
                         {
                             if(bb.Enabled)
                             {
-                                Edicoes.Add(new DB.Celula(Nome, valor));
+                                Edicoes.Add(new DLM.db.Celula(Nome, valor));
 
                             }
                         }
                        
                     }
-                    Vars.Conexao.Update(new List<DB.Celula>() { new DB.Celula("NOME", L.Cells[0].Value.ToString()) }, Edicoes, Vars.nome_db, Vars.nome_tb);
+                    Vars.Dbase.Update("NOME", L.Cells[0].Value.ToString(), Edicoes, Vars.nome_db, Vars.nome_tb);
                     progressBar1.Value = progressBar1.Value + 1;
 
                 }
