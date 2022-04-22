@@ -81,11 +81,6 @@
             this.NIVEL5 = new System.Windows.Forms.ComboBox();
             this.AddNode = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.button3 = new System.Windows.Forms.Button();
-            this.Consulta_Log_Texto = new System.Windows.Forms.TextBox();
-            this.Consulta_Log_Combo = new System.Windows.Forms.ComboBox();
-            this.Log_Acesso = new System.Windows.Forms.DataGridView();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -101,8 +96,6 @@
             this.AddEmNivel.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.icone_png)).BeginInit();
-            this.tabPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Log_Acesso)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -170,7 +163,6 @@
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.Arvore);
-            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
@@ -658,75 +650,6 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click_3);
             // 
-            // tabPage3
-            // 
-            this.tabPage3.Controls.Add(this.button3);
-            this.tabPage3.Controls.Add(this.Consulta_Log_Texto);
-            this.tabPage3.Controls.Add(this.Consulta_Log_Combo);
-            this.tabPage3.Controls.Add(this.Log_Acesso);
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(977, 505);
-            this.tabPage3.TabIndex = 3;
-            this.tabPage3.Text = "Log de Acesso";
-            this.tabPage3.UseVisualStyleBackColor = true;
-            // 
-            // button3
-            // 
-            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button3.Location = new System.Drawing.Point(858, 7);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(113, 20);
-            this.button3.TabIndex = 4;
-            this.button3.Text = "Exportar";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click_2);
-            // 
-            // Consulta_Log_Texto
-            // 
-            this.Consulta_Log_Texto.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Consulta_Log_Texto.Location = new System.Drawing.Point(215, 7);
-            this.Consulta_Log_Texto.Name = "Consulta_Log_Texto";
-            this.Consulta_Log_Texto.Size = new System.Drawing.Size(636, 20);
-            this.Consulta_Log_Texto.TabIndex = 3;
-            this.Consulta_Log_Texto.TextChanged += new System.EventHandler(this.Consulta_Log_Texto_TextChanged);
-            this.Consulta_Log_Texto.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
-            // 
-            // Consulta_Log_Combo
-            // 
-            this.Consulta_Log_Combo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.Consulta_Log_Combo.FormattingEnabled = true;
-            this.Consulta_Log_Combo.Items.AddRange(new object[] {
-            "USER",
-            "MA",
-            "DATA",
-            "ARQUIVOS"});
-            this.Consulta_Log_Combo.Location = new System.Drawing.Point(8, 7);
-            this.Consulta_Log_Combo.Name = "Consulta_Log_Combo";
-            this.Consulta_Log_Combo.Size = new System.Drawing.Size(201, 21);
-            this.Consulta_Log_Combo.TabIndex = 2;
-            this.Consulta_Log_Combo.SelectedIndexChanged += new System.EventHandler(this.Consulta_Log_Combo_SelectedIndexChanged);
-            // 
-            // Log_Acesso
-            // 
-            this.Log_Acesso.AllowUserToAddRows = false;
-            this.Log_Acesso.AllowUserToDeleteRows = false;
-            this.Log_Acesso.AllowUserToOrderColumns = true;
-            this.Log_Acesso.AllowUserToResizeRows = false;
-            this.Log_Acesso.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Log_Acesso.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.Log_Acesso.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.Log_Acesso.Location = new System.Drawing.Point(3, 30);
-            this.Log_Acesso.Name = "Log_Acesso";
-            this.Log_Acesso.RowHeadersVisible = false;
-            this.Log_Acesso.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.Log_Acesso.Size = new System.Drawing.Size(971, 472);
-            this.Log_Acesso.TabIndex = 1;
-            // 
             // Cadastro
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -762,9 +685,6 @@
             this.AddEmNivel.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.icone_png)).EndInit();
-            this.tabPage3.ResumeLayout(false);
-            this.tabPage3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Log_Acesso)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -821,11 +741,6 @@
         private System.Windows.Forms.ToolStripMenuItem ferramentasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportarEmCSVToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mostrarArquivosQuebradosToolStripMenuItem;
-        private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.DataGridView Log_Acesso;
-        private System.Windows.Forms.TextBox Consulta_Log_Texto;
-        private System.Windows.Forms.ComboBox Consulta_Log_Combo;
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Label label1;
     }
 }

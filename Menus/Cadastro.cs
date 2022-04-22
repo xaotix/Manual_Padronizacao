@@ -22,7 +22,7 @@ namespace Manual_Padronizacao
         private static Editar Editar = new Editar();
         private void Cadastro_Load(object sender, EventArgs e)
         {
-            Consulta_Log_Combo.SelectedIndex = 0;
+    
             IconesTree = Program.Menu.IconesTree;
 
             treeView1.ImageList = Program.Menu.IconesTree;
@@ -705,11 +705,7 @@ namespace Manual_Padronizacao
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode==Keys.Enter)
-            {
-               Vars.Dbase.Consulta(new Celula(Consulta_Log_Combo.Text, Consulta_Log_Texto.Text), false,DLM.vars.Cfg.Init.db_plm, "padronizacao_log").AlimentaDataGrid(Log_Acesso);
-               
-            }
+
         }
 
         private void Consulta_Log_Combo_SelectedIndexChanged(object sender, EventArgs e)
@@ -717,30 +713,7 @@ namespace Manual_Padronizacao
 
         }
 
-        private void button3_Click_2(object sender, EventArgs e)
-        {
-            string arqv = Arquivo_Pasta.salvar("csv", "Selecione o destino");
-            if (arqv != "")
-            {
-                List<List<string>> lista = new List<List<string>>();
-                List<string> Cab = new List<string>();
-                foreach (DataGridViewColumn cx in Log_Acesso.Columns)
-                {
-                    Cab.Add(cx.HeaderText);
-                }
-                lista.Add(Cab);
 
-                lista.AddRange(Funcoes_Form.datagrid_para_lista(Log_Acesso));
-                Buffer_Texto.gravar_arquivo_csv(arqv, lista);
-
-                MessageBox.Show("Arquivo salvo.");
-            }
-        }
-
-        private void Consulta_Log_Texto_TextChanged(object sender, EventArgs e)
-        {
-
-        }
 
         private void Diretorio_KeyDown(object sender, KeyEventArgs e)
         {
