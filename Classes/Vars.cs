@@ -11,11 +11,11 @@ namespace Manual_Padronizacao
 {
     public class Vars
     {
-        public static int AlertaMax = 1000;
-        public static bool SubstituirRepositorio = true;
+        public static int AlertaMax => 1000;
+        public static bool SubstituirRepositorio { get; set; } = true;
         public class Ext
         {
-            public static string Pesquisa = "Pdlm";
+            public static string Pesquisa => "Pdlm";
         }
         public class Buffer
         {
